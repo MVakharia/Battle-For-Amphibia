@@ -40,6 +40,16 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     GameObject pauseMenu;
 
+    [SerializeField]
+    ProjectileWeapon coreWeapon;
+
+    public int WaveNumber => coreWeapon.SetNumber;
+
+    [SerializeField]
+    private int score;
+
+    public int Score => score;
+
     public void EnablePauseMenu() => pauseMenu.SetActive(true);
 
     public void DisablePauseMenu() => pauseMenu.SetActive(false);
@@ -51,9 +61,14 @@ public class GameManager : MonoBehaviour
         StartCoroutine(InGame_GameObjectAnimator.Singleton.Routine_GameOver());
     }
 
-    public void StartRound ()
+    public void SetGameState (GameState state)
     {
-        gameState = GameState.InProgress;
+        gameState = state;
+    }
+
+    public void ChangeScore (int amount)
+    {
+        score += amount;
     }
 
     private void Update()

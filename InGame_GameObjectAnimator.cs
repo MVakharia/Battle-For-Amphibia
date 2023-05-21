@@ -19,31 +19,6 @@ public class InGame_GameObjectAnimator : MonoBehaviour
         }
     }
 
-    //const string TMPro_Font_FadeIn_1s = "TMPro_Font_FadeIn_1s";
-
-    /*const string Mesh_FadeOut_1s = "Mesh_FadeOut_1s";
-
-    const string Mesh_FadeIn_1s = "Mesh_FadeIn_1s";*/
-
-    /*
-    const string UI_Image_FadeOut_1s = "UI_Image_FadeOut_1s";
-
-    const string UI_Image_FadeIn_1s = "UI_Image_FadeIn_1s";
-    */
-    /*
-    const string Character_SetUpPosition = "Character_SetUpPosition";
-
-    const string Character_Idle = "Character_Idle";
-
-    //const string Button_Retry_FadeIn_1s = "Button_Retry_FadeIn_1s";
-
-    //const string Button_Quit_FadeIn_1s = "Button_Quit_FadeIn_1s";
-
-    /*
-    [SerializeField]
-    Animator animator_GameOver;
-    */
-
     [SerializeField]
     GameObject gameOverMenu;
 
@@ -51,113 +26,39 @@ public class InGame_GameObjectAnimator : MonoBehaviour
     AnimationManager_UIElement aniManager_GameOver;
 
     [SerializeField]
-    AnimationManager_FadingPanel_Red aniManager_FadingPanel_Red;
-    /*
+    AnimationManager_UIElement aniManager_FadingPanel_Red;
+
     [SerializeField]
-    Animator animator_FadingPanel_Red;
-    */
+    AnimationManager_UIElement aniManager_FadingPanel_Black;
 
     [SerializeField]
     AnimationManager_UIElement aniManager_Button_Retry;
 
     [SerializeField]
-    AnimationManager_Button_GameOver_Quit aniManager_Button_GameOver_Quit;
+    AnimationManager_UIElement aniManager_Button_GameOver_Quit;
 
     [SerializeField]
     AnimationManager_Character aniManager_Character;
 
-    [SerializeField]
-    Animator animator_FadingPanel_Black;
-
-    [SerializeField]
-    Animator animator_Character;
-
-    [SerializeField]
-    Animator animator_Button_Retry;
-
-    [SerializeField]
-    Animator animator_Button_Quit;
-
-    /*
-    public IEnumerator PlayAnimation_GameOver_FadeIn()
-    {
-        animator_GameOver.gameObject.SetActive(true);
-
-        AnimationStateChanger.ChangeAnimationState(animator_GameOver, TMPro_Font_FadeIn_1s);
-
-        yield return null;
-    }
-    */
-    /*
-    public IEnumerator PlayAnimation_Retry_FadeIn ()
-    {
-        AnimationStateChanger.ChangeAnimationState(animator_Button_Retry, Button_Retry_FadeIn_1s);
-
-        yield return null;
-    }
-    */
-
-    /*
-    public IEnumerator PlayAnimation_Quit_FadeIn()
-    {
-        AnimationStateChanger.ChangeAnimationState(animator_Button_Quit, Button_Quit_FadeIn_1s);
-
-        yield return null;
-    }
-    */
-
-    /*
-    public IEnumerator PlayAnimation_FadingPanel_Red_FadeOut ()
-    {
-        AnimationStateChanger.ChangeAnimationState(animator_FadingPanel_Red, UI_Image_FadeOut_1s);
-
-        yield return null;
-    }
-
-    public IEnumerator PlayAnimation_FadingPanel_Red_FadeIn()
-    {
-        AnimationStateChanger.ChangeAnimationState(animator_FadingPanel_Red, UI_Image_FadeIn_1s);
-
-        yield return null;
-    }
-    */
-    /*
-    public IEnumerator PlayAnimation_Character_SetUpPosition ()
-    {
-        AnimationStateChanger.ChangeAnimationState(animator_Character, Character_SetUpPosition);
-
-        yield return null;
-    }
-
-    public IEnumerator PlayAnimation_Character_Idle ()
-    {
-        AnimationStateChanger.ChangeAnimationState(animator_Character, Character_Idle);
-
-        yield return null;
-    }
-    */
-
-    
-
     public IEnumerator Routine_RoundStart ()
     {
-        aniManager_FadingPanel_Red.PlayAnimation_FadeOut();
+        aniManager_FadingPanel_Black.gameObject.SetActive(true);
+
+        aniManager_FadingPanel_Black.PlayAnimation_FadeOut_1s();
 
         yield return new WaitForSeconds(1);
 
-        aniManager_Character.PlayAnimation_SetUpPosition();
+        aniManager_FadingPanel_Black.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(2);
 
-        animator_Character.GetComponent<Character_Switch>().SetActiveHero();
+        aniManager_Character.GetComponent<Character_Switch>().SetActiveHero();
 
         aniManager_Character.PlayAnimation_Idle();
 
-        aniManager_Character.Animator_Disable();
+        GameManager.Singleton.SetGameState(GameState.InProgress);
 
-        GameManager.Singleton.StartRound();
-
-        animator_Character.GetComponent<Character_Rendering>().SetPropertiesOnRoundStart();
+        aniManager_Character.GetComponent<Character_Rendering>().SetPropertiesOnRoundStart();
     }
 
     public IEnumerator Routine_GameOver ()
@@ -166,30 +67,34 @@ public class InGame_GameObjectAnimator : MonoBehaviour
 
         gameOverMenu.SetActive(true);
 
-        aniManager_GameOver.PlayAnimation();
+        aniManager_GameOver.PlayAnimation_FadeIn_1s();
 
         yield return new WaitForSeconds(3);
 
-        aniManager_FadingPanel_Red.PlayAnimation();
+        aniManager_FadingPanel_Red.gameObject.SetActive(true);
+
+        aniManager_FadingPanel_Red.PlayAnimation_FadeIn_1s();
 
         yield return new WaitForSeconds(1);
 
-        animator_Button_Retry.gameObject.SetActive(true);
+        aniManager_Button_Retry.gameObject.SetActive(true);
 
-        aniManager_Button_Retry.PlayAnimation();
+        aniManager_Button_Retry.PlayAnimation_FadeIn_1s();
 
         yield return new WaitForSeconds(0.5F);
 
-        animator_Button_Quit.gameObject.SetActive(true);
+        aniManager_Button_GameOver_Quit.gameObject.SetActive(true);
 
-        aniManager_Button_GameOver_Quit.PlayAnimation();
+        aniManager_Button_GameOver_Quit.PlayAnimation_FadeIn_1s();
+
+        aniManager_FadingPanel_Black.gameObject.SetActive(true);
     }
 
     public IEnumerator Routine_PauseGame ()
     {
-        Time.timeScale = 0;
+        //GameManager.Singleton.SetGameState(GameState.Paused);
 
-        //change game state to Paused. 
+        Time.timeScale = 0;
 
         GameManager.Singleton.EnablePauseMenu();
 
@@ -208,12 +113,18 @@ public class InGame_GameObjectAnimator : MonoBehaviour
 
         Time.timeScale = 1;
 
+        //GameManager.Singleton.SetGameState(GameState.InProgress);
+
         //change game state to In Progress. 
     }
 
     public IEnumerator Routine_RestartGame ()
     {
         //fade in the black fading panel over 1 second. 
+
+        aniManager_FadingPanel_Black.gameObject.SetActive(true);
+
+        aniManager_FadingPanel_Black.PlayAnimation_FadeIn_1s();
 
         yield return new WaitForSecondsRealtime(1);
 
@@ -228,6 +139,10 @@ public class InGame_GameObjectAnimator : MonoBehaviour
     {
         //fade in the black fading panel over 1 second. 
 
+        aniManager_FadingPanel_Black.gameObject.SetActive(true);
+
+        aniManager_FadingPanel_Black.PlayAnimation_FadeIn_1s();
+
         yield return new WaitForSecondsRealtime(1);
 
         SceneManager.LoadScene("Game");
@@ -240,6 +155,10 @@ public class InGame_GameObjectAnimator : MonoBehaviour
     public IEnumerator Routine_QuitGame()
     {
         //Fade in the black fading panel over 1 second.
+
+        aniManager_FadingPanel_Black.gameObject.SetActive(true);
+
+        aniManager_FadingPanel_Black.PlayAnimation_FadeIn_1s();
 
         yield return new WaitForSecondsRealtime(1);
 

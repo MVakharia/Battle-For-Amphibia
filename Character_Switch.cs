@@ -33,11 +33,6 @@ public class Character_Switch : MonoBehaviour
         }
     }
 
-    /*private void SetActiveHeroOnGameStart ()
-    {
-        transform.GetChild(1).gameObject.SetActive(true);
-    }*/
-
     private void Update()
     {
         if (GameManager.Singleton.GameState != GameState.InProgress) return;

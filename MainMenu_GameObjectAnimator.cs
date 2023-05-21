@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -74,6 +73,6 @@ public class MainMenu_GameObjectAnimator : MonoBehaviour
 
     public void Start()
     {
-        
+        StartCoroutine(Routine_OpenScene());
     }
 }

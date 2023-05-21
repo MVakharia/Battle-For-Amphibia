@@ -12,6 +12,8 @@ public class ProjectileKillbox : MonoBehaviour
         if (other.gameObject.tag == "Projectile")
         {
             parent._ObjectSpawner.ReAddToPool(other.gameObject);
+
+            GameManager.Singleton.ChangeScore(10);
         }
     }
 }

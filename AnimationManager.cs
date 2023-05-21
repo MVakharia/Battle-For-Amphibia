@@ -2,24 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-enum AnimationStates
+public enum AnimationStates
 {
-    None, TMPro_Font_FadeIn_1s, Button_Retry_FadeIn_1s
+    None,
+}
+
+public enum AnimationStates_FadeIn_1s
+{
+    None, TMPro_Font_FadeIn_1s, Button_Retry_FadeIn_1s, UI_Image_FadeIn_1s, Button_Quit_FadeIn_1s
+}
+
+public enum AnimationStates_FadeOut_1s
+{
+    None, UI_Image_FadeOut_1s,
 }
 
 public abstract class AnimationManager : MonoBehaviour
 {
+    [SerializeField]
+    protected AnimationStates states;
 
     [SerializeField]
-    AnimationStates states;
+    protected AnimationStates_FadeIn_1s states_FadeIn_1s;
 
-    protected string State => states switch
+    [SerializeField]
+    protected AnimationStates_FadeOut_1s states_FadeOut_1s;
+
+    protected string State_FadeIn_1s_ToString()
     {
-        AnimationStates.TMPro_Font_FadeIn_1s => "TMPro_Font_FadeIn_1s",
-        AnimationStates.Button_Retry_FadeIn_1s => "Button_Retry_FadeIn_1s",
+        return states_FadeIn_1s switch
+        {
+            AnimationStates_FadeIn_1s.TMPro_Font_FadeIn_1s => "TMPro_Font_FadeIn_1s",
+            AnimationStates_FadeIn_1s.Button_Retry_FadeIn_1s => "Button_Retry_FadeIn_1s",
+            AnimationStates_FadeIn_1s.UI_Image_FadeIn_1s => "UI_Image_FadeIn_1s",
+            AnimationStates_FadeIn_1s.Button_Quit_FadeIn_1s => "Button_Quit_FadeIn_1s",
 
-        _ => ""
-    };
+            _ => ""
+        };
+    }
+
+    protected string State_FadeOut_1s_ToString ()
+    {
+        return states_FadeOut_1s switch
+        {
+            AnimationStates_FadeOut_1s.UI_Image_FadeOut_1s => "UI_Image_FadeOut_1s",
+            _ => ""
+        };
+    }
 
     [SerializeField]
     protected Animator animator;
@@ -39,5 +68,7 @@ public abstract class AnimationManager : MonoBehaviour
         }
     }
 
-    public abstract void PlayAnimation();
+    public abstract void PlayAnimation_Idle();
+    public abstract void PlayAnimation_FadeIn_1s();
+    public abstract void PlayAnimation_FadeOut_1s();
 }

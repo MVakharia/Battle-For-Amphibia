@@ -24,6 +24,14 @@ public class ProjectileWeapon : MonoBehaviour
     [SerializeField]
     private int setNumber;
 
+    public int SetNumber => setNumber;
+
+    [SerializeField]
+    private float fireRate;
+
+    [SerializeField]
+    private float projectileSpeed;
+
     //Fire one projectile from one spawn point. 
     private IEnumerator FireProjectile (int numberOfProjectiles, GameObject spawnPoint, float delay)
     {
@@ -68,7 +76,9 @@ public class ProjectileWeapon : MonoBehaviour
     {
         if (!isFiring)
         {
-            StartCoroutine(FireWaves(10, spawnPointArray, 1.5F, 2, Vector3.zero, 0));
+            StartCoroutine(FireWaves(30, spawnPointArray, fireRate, projectileSpeed, Vector3.zero, 0));
+
+            setNumber++;
 
             StartFiring();
         }

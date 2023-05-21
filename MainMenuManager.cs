@@ -14,9 +14,4 @@ public class MainMenuManager : MonoBehaviour
     {
         StartCoroutine(MainMenu_GameObjectAnimator.Singleton.Routine_QuitGameButton());
     }
-
-    public void Start()
-    {
-        StartCoroutine(MainMenu_GameObjectAnimator.Singleton.Routine_OpenScene());
-    }
 }

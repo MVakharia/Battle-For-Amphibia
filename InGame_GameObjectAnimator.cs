@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -19,26 +18,16 @@ public class InGame_GameObjectAnimator : MonoBehaviour
         }
     }
 
-    [SerializeField]
-    GameObject gameOverMenu;
+    private float RoundStartAnimationLength => 2;
 
-    [SerializeField]
-    AnimationManager_UIElement aniManager_GameOver;
 
-    [SerializeField]
-    AnimationManager_UIElement aniManager_FadingPanel_Red;
-
-    [SerializeField]
-    AnimationManager_UIElement aniManager_FadingPanel_Black;
-
-    [SerializeField]
-    AnimationManager_UIElement aniManager_Button_Retry;
-
-    [SerializeField]
-    AnimationManager_UIElement aniManager_Button_GameOver_Quit;
-
-    [SerializeField]
-    AnimationManager_Character aniManager_Character;
+    [SerializeField] GameObject gameOverMenu;
+    [SerializeField] AnimationManager_UIElement aniManager_GameOverText;
+    [SerializeField] AnimationManager_UIElement aniManager_FadingPanel_Red;
+    [SerializeField] AnimationManager_UIElement aniManager_FadingPanel_Black;
+    [SerializeField] AnimationManager_UIElement aniManager_GameOverMenu;
+    [SerializeField] AnimationManager_Character aniManager_Character;
+    [SerializeField] AnimationManager_UIElement aniManager_PauseMenu;
 
     public IEnumerator Routine_RoundStart ()
     {
@@ -50,7 +39,9 @@ public class InGame_GameObjectAnimator : MonoBehaviour
 
         aniManager_FadingPanel_Black.gameObject.SetActive(false);
 
-        yield return new WaitForSeconds(2);
+        //play the animation for the characters flying in and taking their positions. 
+
+        yield return new WaitForSeconds(RoundStartAnimationLength);
 
         aniManager_Character.GetComponent<Character_Switch>().SetActiveHero();
 
@@ -63,11 +54,11 @@ public class InGame_GameObjectAnimator : MonoBehaviour
 
     public IEnumerator Routine_GameOver ()
     {
-        aniManager_GameOver.gameObject.SetActive(true);
+        aniManager_GameOverText.gameObject.SetActive(true);
 
         gameOverMenu.SetActive(true);
 
-        aniManager_GameOver.PlayAnimation_FadeIn_1s();
+        aniManager_GameOverText.PlayAnimation_FadeIn_1s();
 
         yield return new WaitForSeconds(3);
 
@@ -77,35 +68,35 @@ public class InGame_GameObjectAnimator : MonoBehaviour
 
         yield return new WaitForSeconds(1);
 
-        aniManager_Button_Retry.gameObject.SetActive(true);
+        aniManager_GameOverMenu.gameObject.SetActive(true);
 
-        aniManager_Button_Retry.PlayAnimation_FadeIn_1s();
+        aniManager_GameOverMenu.PlayAnimation_FadeIn_1s();
 
-        yield return new WaitForSeconds(0.5F);
-
-        aniManager_Button_GameOver_Quit.gameObject.SetActive(true);
-
-        aniManager_Button_GameOver_Quit.PlayAnimation_FadeIn_1s();
+        yield return new WaitForSeconds(1);
 
         aniManager_FadingPanel_Black.gameObject.SetActive(true);
     }
 
     public IEnumerator Routine_PauseGame ()
     {
-        //GameManager.Singleton.SetGameState(GameState.Paused);
+        GameManager.Singleton.SetGameState(GameState.Paused);
 
         Time.timeScale = 0;
 
         GameManager.Singleton.EnablePauseMenu();
 
-        //fade in the pause menu over 1 second. 
+        //fade in the pause menu over 1 second.
 
-        yield return new WaitForSeconds(1);
+        aniManager_PauseMenu.PlayAnimation_FadeIn_1s();
+
+        yield return new WaitForSecondsRealtime(1);
     }
 
     public IEnumerator Routine_ResumeGame ()
     {
         //fade out the pause menu over 1 second.
+
+        aniManager_PauseMenu.PlayAnimation_FadeOut_1s();
 
         yield return new WaitForSecondsRealtime(1);
 
@@ -113,9 +104,7 @@ public class InGame_GameObjectAnimator : MonoBehaviour
 
         Time.timeScale = 1;
 
-        //GameManager.Singleton.SetGameState(GameState.InProgress);
-
-        //change game state to In Progress. 
+        GameManager.Singleton.SetGameState(GameState.InProgress);
     }
 
     public IEnumerator Routine_RestartGame ()

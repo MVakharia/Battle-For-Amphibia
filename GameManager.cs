@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public enum GameState { Standby, InProgress, Paused, GameOver }
 
@@ -78,11 +75,15 @@ public class GameManager : MonoBehaviour
             if (gameState == GameState.InProgress)
             {
                 StartCoroutine(InGame_GameObjectAnimator.Singleton.Routine_PauseGame());
+
+                return;
             }
             if(gameState == GameState.Paused)
             {
                 StartCoroutine(InGame_GameObjectAnimator.Singleton.Routine_ResumeGame());
-            }            
+
+                return;
+            }
         }
     }
 }

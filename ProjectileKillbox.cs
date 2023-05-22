@@ -13,6 +13,11 @@ public class ProjectileKillbox : MonoBehaviour
         {
             parent._ObjectSpawner.ReAddToPool(other.gameObject);
 
+            if(GameManager.Singleton.GameState == GameState.GameOver)
+            {
+                return;
+            }
+
             GameManager.Singleton.ChangeScore(10);
         }
     }

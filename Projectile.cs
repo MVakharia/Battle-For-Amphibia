@@ -9,18 +9,19 @@ public enum Direction
 
 public class Projectile : MonoBehaviour
 {
-    private static int numberOfActiveProjectiles;
-
-    public static int NumberOfActiveProjectiles => numberOfActiveProjectiles;
+    /// <summary>
+    /// The number of projectiles currently in play and moving within the scene. 
+    /// </summary>
+    public static int NumberOfActiveProjectiles { get; private set; }
 
     public static void IncrementActiveProjectiles ()
     {
-        numberOfActiveProjectiles++;
+        NumberOfActiveProjectiles++;
     }
 
     public static void DecrementActiveProjectiles ()
     {
-        numberOfActiveProjectiles--;
+        NumberOfActiveProjectiles--;
     }
 
     [SerializeField]

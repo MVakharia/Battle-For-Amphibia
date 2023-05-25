@@ -18,8 +18,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    [SerializeField]
-    private float leftBounds, rightBounds, upperBounds, lowerBounds;
+    [SerializeField] private float leftBounds, rightBounds, upperBounds, lowerBounds;
 
     public float LeftBounds => leftBounds;
     public float RightBounds => rightBounds;
@@ -27,33 +26,28 @@ public class GameManager : MonoBehaviour
     public float LowerBounds => lowerBounds;
 
     [SerializeField]
-    AudioSource audioSource;
-
-    [SerializeField]
     private GameState gameState;
 
     public GameState GameState => gameState;
 
-    [SerializeField]
-    GameObject pauseMenu;
+    [SerializeField] GameObject pauseMenu;
+    [SerializeField] ProjectileWeapon coreWeapon;
 
-    [SerializeField]
-    ProjectileWeapon coreWeapon;
+    [SerializeField] private int score;
+
+    
 
     public int WaveNumber => coreWeapon.SetNumber;
-
-    [SerializeField]
-    private int score;
-
     public int Score => score;
 
     public void EnablePauseMenu() => pauseMenu.SetActive(true);
-
     public void DisablePauseMenu() => pauseMenu.SetActive(false);
+
+    
 
     public void TriggerGameOver ()
     {
-        gameState = GameState.GameOver;
+        SetGameState(GameState.GameOver);        
 
         StartCoroutine(SceneManager_InGame.Singleton.Routine_GameOver());
     }

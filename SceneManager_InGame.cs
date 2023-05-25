@@ -29,6 +29,8 @@ public class SceneManager_InGame : MonoBehaviour
     [SerializeField] AnimationManager_Character aniManager_Character;
     [SerializeField] AnimationManager_UIElement aniManager_PauseMenu;
 
+    [SerializeField] AudioManager_InGame audioManager_InGame;
+
     public IEnumerator Routine_RoundStart ()
     {
         aniManager_FadingPanel_Black.gameObject.SetActive(true);
@@ -54,13 +56,19 @@ public class SceneManager_InGame : MonoBehaviour
 
     public IEnumerator Routine_GameOver ()
     {
+        audioManager_InGame.StopBGM();
+
         aniManager_GameOverText.gameObject.SetActive(true);
 
         gameOverMenu.SetActive(true);
 
         aniManager_GameOverText.PlayAnimation_FadeIn_1s();
 
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1);
+
+        audioManager_InGame.PlayBGM_GameOver();
+
+        yield return new WaitForSeconds(2);
 
         aniManager_FadingPanel_Red.gameObject.SetActive(true);
 

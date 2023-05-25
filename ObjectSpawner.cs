@@ -46,8 +46,6 @@ public class ObjectSpawner : MonoBehaviour
 
         return result;
     }
-    
-
 
     public void ReAddToPool (GameObject projectile)
     {

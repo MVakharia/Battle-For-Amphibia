@@ -2,17 +2,17 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class InGame_GameObjectAnimator : MonoBehaviour
+public class SceneManager_InGame : MonoBehaviour
 {
-    private static InGame_GameObjectAnimator singleton;
+    private static SceneManager_InGame singleton;
 
-    public static InGame_GameObjectAnimator Singleton
+    public static SceneManager_InGame Singleton
     {
         get
         {
             if (singleton == null)
             {
-                singleton = GameObject.FindGameObjectWithTag("Animation Manager").GetComponent<InGame_GameObjectAnimator>();
+                singleton = GameObject.FindGameObjectWithTag("Animation Manager").GetComponent<SceneManager_InGame>();
             }
             return singleton;
         }
@@ -85,8 +85,6 @@ public class InGame_GameObjectAnimator : MonoBehaviour
 
         GameManager.Singleton.EnablePauseMenu();
 
-        //fade in the pause menu over 1 second.
-
         aniManager_PauseMenu.PlayAnimation_FadeIn_1s();
 
         yield return new WaitForSecondsRealtime(1);
@@ -151,7 +149,7 @@ public class InGame_GameObjectAnimator : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(1);
 
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("Main Menu");
 
         Time.timeScale = 1;
 

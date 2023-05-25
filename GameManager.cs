@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     {
         gameState = GameState.GameOver;
 
-        StartCoroutine(InGame_GameObjectAnimator.Singleton.Routine_GameOver());
+        StartCoroutine(SceneManager_InGame.Singleton.Routine_GameOver());
     }
 
     public void SetGameState (GameState state)
@@ -74,13 +74,13 @@ public class GameManager : MonoBehaviour
         {
             if (gameState == GameState.InProgress)
             {
-                StartCoroutine(InGame_GameObjectAnimator.Singleton.Routine_PauseGame());
+                StartCoroutine(SceneManager_InGame.Singleton.Routine_PauseGame());
 
                 return;
             }
             if(gameState == GameState.Paused)
             {
-                StartCoroutine(InGame_GameObjectAnimator.Singleton.Routine_ResumeGame());
+                StartCoroutine(SceneManager_InGame.Singleton.Routine_ResumeGame());
 
                 return;
             }

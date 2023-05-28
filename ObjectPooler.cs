@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectSpawner : MonoBehaviour
+public class ObjectPooler : MonoBehaviour
 {
     [SerializeField]
     private GameObject prefab;
@@ -9,19 +9,19 @@ public class ObjectSpawner : MonoBehaviour
     private List<GameObject> prefabPool;
 
     [SerializeField]
-    private int projectilePoolSize;
+    private int poolSize;
 
     private void Awake()
     {
-        prefabPool = new List<GameObject>(projectilePoolSize);
+        prefabPool = new List<GameObject>(poolSize);
 
-        for(int i = 0; i < projectilePoolSize; i++)
+        for(int i = 0; i < poolSize; i++)
         {
-            GameObject newProjectile = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+            GameObject newObject = Instantiate(prefab, Vector3.zero, Quaternion.identity);
 
-            newProjectile.SetActive(false);
+            newObject.SetActive(false);
 
-            prefabPool.Add(newProjectile);
+            prefabPool.Add(newObject);
         }
     }
 

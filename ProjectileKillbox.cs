@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ProjectileKillbox : MonoBehaviour
@@ -9,14 +7,11 @@ public class ProjectileKillbox : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Projectile")
+        if (other.gameObject.CompareTag("Projectile"))
         {
             parent._ObjectSpawner.ReAddToPool(other.gameObject);
 
-            if(GameManager.Singleton.GameState == GameState.GameOver)
-            {
-                return;
-            }
+            if(GameManager.Singleton.GameState == GameState.GameOver) return;
 
             GameManager.Singleton.ChangeScore(10);
         }

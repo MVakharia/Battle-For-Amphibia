@@ -25,25 +25,17 @@ public class GameManager : MonoBehaviour
     public float UpperBounds => upperBounds;
     public float LowerBounds => lowerBounds;
 
-    [SerializeField]
-    private GameState gameState;
+    [SerializeField]    private GameState gameState;
 
     public GameState GameState => gameState;
 
     [SerializeField] GameObject pauseMenu;
     [SerializeField] ProjectileWeapon coreWeapon;
-
     [SerializeField] private int score;
 
-    
-
-    public int WaveNumber => coreWeapon.SetNumber;
     public int Score => score;
-
     public void EnablePauseMenu() => pauseMenu.SetActive(true);
     public void DisablePauseMenu() => pauseMenu.SetActive(false);
-
-    
 
     public void TriggerGameOver ()
     {

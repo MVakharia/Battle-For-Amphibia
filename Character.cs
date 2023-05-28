@@ -8,14 +8,13 @@ public enum CharacterState { Alive, Dead }
 
 public class Character : MonoBehaviour
 {
+    [Range(0, 100)]
     [SerializeField] private int health;
     [SerializeField] private int maxHealth;
-    [SerializeField] private float anneCharge, anneBonusCharge, sashaPomPomCharge, sashaMegaPomCharge, marcyCharge;
-    [SerializeField] private int d20Number;
+    [Range(0, 2)]
     [SerializeField] private float hurtInvulnTime;
-
     [SerializeField] private GameObject sasha, anne, marcy;
-    [SerializeField] private ObjectSpawner _objectSpawner;
+    [SerializeField] private ObjectPooler _objectSpawner;
     [SerializeField] private Character_Rendering _character_Rendering;
     [SerializeField] private Character_Switch _character_Switch;
     [SerializeField] private Rigidbody2D _rigidbody;
@@ -28,21 +27,11 @@ public class Character : MonoBehaviour
     public int Health => health;
     public int MaxHealth => maxHealth;
     public float HealthPercentage => Health / (float)MaxHealth;
-    public int D20Number => d20Number;
+    
     public CharacterState CurrentState => currentState;
     private Vector3 StartingPosition => new(-2.79F, -3, 5);
     
-    private IEnumerator RollD20 (float delay)
-    {
-        while(true)
-        {
-            d20Number = Random.Range(1, 21);
-
-            yield return new WaitForSeconds(delay);
-        }
-    }
-
-
+    
     private IEnumerator Routine_TakeDamage (int damage)
     {
         health -= damage;
@@ -89,11 +78,6 @@ public class Character : MonoBehaviour
 
             StartCoroutine(Routine_TakeDamage(p.Damage));
         }
-    }
-
-    private void Start()
-    {
-        StartCoroutine(RollD20(1));
     }
 
     private void Update()

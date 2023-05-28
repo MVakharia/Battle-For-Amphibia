@@ -14,58 +14,24 @@ public class Projectile : MonoBehaviour
     /// </summary>
     public static int NumberOfActiveProjectiles { get; private set; }
 
-    public static void IncrementActiveProjectiles ()
-    {
-        NumberOfActiveProjectiles++;
-    }
+    public static void IncrementActiveProjectiles() => NumberOfActiveProjectiles++;
+    public static void DecrementActiveProjectiles() => NumberOfActiveProjectiles--;
 
-    public static void DecrementActiveProjectiles ()
-    {
-        NumberOfActiveProjectiles--;
-    }
-
-    [SerializeField]
-    private float moveSpeed;
-
-    [SerializeField]
-    private float extraMoveSpeed;
-
-    private Vector3 travelDirection;
+    [SerializeField] private float moveSpeed;
 
     public int Damage => damage;
 
-    [SerializeField]
-    private int damage;
+    [SerializeField] private int damage;
 
-    public void SetMoveSpeed (float speed)
-    {
-        moveSpeed = speed;
-    }
+    private void Move() => transform.Translate(moveSpeed * Time.deltaTime * -Vector3.up);
 
-    public void SetTravelDirection (Vector3 dir)
+    private void Start()
     {
-        travelDirection = dir;
-    }
-
-    public void SetExtraMoveSpeed (float speed)
-    {
-        extraMoveSpeed = speed;
-    }
-
-    private void MoveNormal()
-    {
-        transform.Translate(moveSpeed * Time.deltaTime * -Vector3.up);
-    }
-
-    private void ExtraMovement ()
-    {
-        transform.Translate(extraMoveSpeed * Time.deltaTime * travelDirection);
+        
     }
 
     void Update()
     {
-        MoveNormal();
-
-        ExtraMovement();
+        Move();
     }
 }

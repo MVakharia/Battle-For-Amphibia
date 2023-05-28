@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class ProjectileKillboxHolder : MonoBehaviour
 {
-    public ObjectSpawner _ObjectSpawner => _objectSpawner;
+    public ObjectPooler _ObjectSpawner => _objectSpawner;
 
     [SerializeField]
-    private ObjectSpawner _objectSpawner;
+    private ObjectPooler _objectSpawner;
 
 
 }

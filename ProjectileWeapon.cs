@@ -35,7 +35,7 @@ public class ProjectileWeapon : MonoBehaviour
 
     private void Start()
     {
-        readyToFire = true;
+        //readyToFire = true;
 
         cooldownTimeCurrent = CooldownTimeMax;
     }
@@ -49,13 +49,6 @@ public class ProjectileWeapon : MonoBehaviour
             StartFiring();
         }
 
-        if(isFiring && !isCoolingDown)
-        {
-            FireProjectile();
-
-            StartCoolingDown();
-        }
-
         if(isCoolingDown)
         {
             CountCooldown();
@@ -66,6 +59,13 @@ public class ProjectileWeapon : MonoBehaviour
             StopCoolingDown();
 
             ResetCooldownTimer();
+        }
+
+        if (isFiring && !isCoolingDown)
+        {
+            StartCoolingDown();
+
+            FireProjectile();
         }
 
         Vector3 direction = character.transform.position - transform.position;

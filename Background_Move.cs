@@ -7,11 +7,11 @@ public class Background_Move : MonoBehaviour
     [Range(0, 2)]
     [SerializeField] private float moveSpeed;
     [SerializeField] private Character _character;
-    [SerializeField] private ActionInterface actionInterface;
+    [SerializeField] private Character_Move _characterMove;
 
-    private void Move()
+    private void Move(float speed)
     {
-        transform.Translate(-moveSpeed * Time.deltaTime * actionInterface.MovementVector());
+        transform.Translate(-speed * Time.deltaTime * _characterMove.MovementVector());
     }
 
     // Update is called once per frame
@@ -27,6 +27,6 @@ public class Background_Move : MonoBehaviour
             return;
         }
 
-        Move();
+        Move(moveSpeed);
     }
 }

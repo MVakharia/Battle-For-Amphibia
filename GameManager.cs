@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(ControlInterface.PressedThisFrame_Keyboard_Pause)
+        if(ControlInterface.PressedThisFrame_Keyboard1_Pause)
         {
             if (gameState == GameState.InProgress)
             {

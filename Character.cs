@@ -30,8 +30,7 @@ public class Character : MonoBehaviour
     
     public CharacterState CurrentState => currentState;
     private Vector3 StartingPosition => new(-2.79F, -3, 5);
-    
-    
+
     private IEnumerator Routine_TakeDamage (int damage)
     {
         health -= damage;

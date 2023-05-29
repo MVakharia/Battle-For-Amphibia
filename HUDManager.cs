@@ -28,7 +28,7 @@ public class HUDManager : MonoBehaviour
 
         slider_Health.value = SliderValue(slider_Health.value, _character.HealthPercentage, 1);
 
-        slider_AbilityCharge_PomPom.value = SliderValue(slider_AbilityCharge_PomPom.value, _character_Abilities.AbilityCharge_PomPom, 1);
+        slider_AbilityCharge_PomPom.value = SliderValue(slider_AbilityCharge_PomPom.value, _character_Abilities.AbilityCharge_PomPom, 2);
 
         slider_AbilityCharge_PomPom_Bonus.value = SliderValue(slider_AbilityCharge_PomPom_Bonus.value, _character_Abilities.AbilityCharge_PomPom_Bonus, 1);
 

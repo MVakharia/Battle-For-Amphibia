@@ -3,33 +3,43 @@ using System;
 
 public class Character_Switch : MonoBehaviour
 {
-    public SelectedHero ActiveHero => (SelectedHero)selectedHeroIndex;
+    [SerializeField] private SelectedHero activeHero;
+    [SerializeField] private int selectedHeroIndex = 2;
+    [SerializeField] private Character _character;
 
-    private int selectedHeroIndex = 1;
-
-    [SerializeField]
-    private Character _character;
+    public SelectedHero ActiveHero => activeHero;
 
     public void SetActiveHero()
     {
-        if (ControlInterface.PressedThisFrame_Keyboard_SelectNextHero)
-        {
-            selectedHeroIndex = (selectedHeroIndex + 1) % transform.childCount;
-        }
-
-        if(ControlInterface.PressedThisFrame_Keyboard_SelectPreviousHero)
-        {
-            selectedHeroIndex--;
-
-            if(selectedHeroIndex < 0)
-            {
-                selectedHeroIndex = transform.childCount - 1;
-            }
-        }
-
         for (int i = 0; i < transform.childCount; i++)
         {
             transform.GetChild(i).gameObject.SetActive(i == selectedHeroIndex);
+        }
+
+        activeHero = (SelectedHero)selectedHeroIndex;
+
+        if (ControlInterface.PressedThisFrame_Keyboard1_SelectPreviousHero)
+        {
+            if(selectedHeroIndex == 1)
+            {
+                selectedHeroIndex = 3;
+            }
+            else
+            {
+                selectedHeroIndex--;
+            }
+        }
+
+        if (ControlInterface.PressedThisFrame_Keyboard1_SelectNextHero)
+        {
+            if(selectedHeroIndex == 3)
+            {
+                selectedHeroIndex = 1;
+            }
+            else
+            {
+                selectedHeroIndex++;
+            }
         }
     }
 

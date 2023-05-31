@@ -9,13 +9,11 @@ public enum CooldownDisplayType
     Timer, Percentage
 }
 
-[SerializeField]
+[System.Serializable]
 public class HUD_Element_Ability 
 {
     public Slider slider_Cooldown;
-
     public TMP_Text TMP_Text_Cooldown;
-
     public RawImage rawImg_Icon;
 }
 

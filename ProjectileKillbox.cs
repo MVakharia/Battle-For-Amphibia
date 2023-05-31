@@ -13,7 +13,7 @@ public class ProjectileKillbox : MonoBehaviour
 
             if(GameManager.Singleton.GameState == GameState.GameOver) return;
 
-            GameManager.Singleton.ChangeScore(10);
+            GameManager.Singleton.AwardPoints(10);
         }
     }
 }

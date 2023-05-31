@@ -10,7 +10,6 @@ public class ProjectileWeapon : MonoBehaviour
     [SerializeField] private float projectileRotation;
     [SerializeField] private bool isCoolingDown;    
     [SerializeField] private float cooldownTimeCurrent;
-
     [SerializeField] GameObject character;
 
     private float CooldownTimeMax => 1 / projectilesPerSecond;
@@ -35,7 +34,7 @@ public class ProjectileWeapon : MonoBehaviour
 
     private void Start()
     {
-        //readyToFire = true;
+        readyToFire = true;
 
         cooldownTimeCurrent = CooldownTimeMax;
     }

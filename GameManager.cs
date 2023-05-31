@@ -49,7 +49,12 @@ public class GameManager : MonoBehaviour
         gameState = state;
     }
 
-    public void ChangeScore (int amount)
+    public void AwardPoints (int amount)
+    {
+        score += amount;
+    }
+
+    public void AddToScore (int amount)
     {
         score += amount;
     }

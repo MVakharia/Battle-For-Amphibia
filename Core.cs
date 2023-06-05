@@ -5,7 +5,7 @@ using UnityEngine;
 public class Core : MonoBehaviour
 {
     [SerializeField]
-    private GameObject Frobot;
+    private GameObject npc;
 
     [System.Serializable]
     public class SpawningSlot
@@ -23,7 +23,6 @@ public class Core : MonoBehaviour
     [SerializeField]
     private int numberOfNPCsToSpawn;
 
-
     public IEnumerator SpawnNPC ()
     {
         int limit = numberOfNPCsToSpawn;
@@ -37,14 +36,14 @@ public class Core : MonoBehaviour
 
             if(!spawnSlots[i].NPC)
             {
-                spawnSlots[i].NPC = Instantiate(Frobot, spawnSlots[i].Position, Quaternion.identity);
+                spawnSlots[i].NPC = Instantiate(npc, spawnSlots[i].Position, Quaternion.identity);
+
+                Frobot.IncreaseCount();
             }
 
             yield return new WaitForSeconds(2);
         }        
     }
-
-
 
     private void Start()
     {

@@ -32,6 +32,10 @@ public class Character_Abilities : MonoBehaviour
 
     private float ability_PomPom_chargeTimeMultiplier = 1;
 
+    private float ability_TennisBall_chargeTimeMultiplier = 1;
+
+    private float ability_Arrow_chargeTimeMultiplier = 1;
+
     private IEnumerator RollD20(float delay)
     {
         while (true)
@@ -52,6 +56,14 @@ public class Character_Abilities : MonoBehaviour
         ability_PomPom.Run(ability_PomPom_chargeTimeMultiplier);
 
         ability_PowerPom.Run(0);
+
+        Ability_TennisBall.Run(ability_TennisBall_chargeTimeMultiplier);
+
+        ability_Domino.Run(0);
+
+        ability_Arrow.Run(ability_Arrow_chargeTimeMultiplier);
+
+        ability_D20.Run(0);
 
         if(ControlInterface.PressedThisFrame_Keyboard1_Ability1)
         {

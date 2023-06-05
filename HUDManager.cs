@@ -10,11 +10,52 @@ public enum CooldownDisplayType
 }
 
 [System.Serializable]
-public class HUD_Element_Ability 
+public class HUD_Element_Ability : HUD_Element_Sliding
 {
-    public Slider slider_Cooldown;
-    public TMP_Text TMP_Text_Cooldown;
-    public RawImage rawImg_Icon;
+    public TMP_Text TMP_Text;
+    public RawImage rawImg;
+
+    public void SetCooldownText(CooldownDisplayType type, Ability ability)
+    {
+        if (ability.isCharging)
+        {
+            if (type == CooldownDisplayType.Timer)
+            {
+                TMP_Text.text = (1 - ability.chargeTime).ToString("0");
+            }
+            else if (type == CooldownDisplayType.Percentage)
+            {
+                TMP_Text.text = (100 * ability.chargeTime).ToString("0");
+            }
+        }
+        else
+        {
+            TMP_Text.text = "";
+        }
+    }
+
+    public void ToggleIconVisibility (bool enableCheck)
+    {
+        rawImg.enabled = enableCheck;
+    }
+}
+
+[System.Serializable]
+public class HUD_Element_Sliding
+{
+    public Slider slider;
+    
+    public void SetSliderValue(float targetValue, float sliderSpeed, bool enableCheck)
+    {
+        if (enableCheck)
+        {
+            slider.value = Mathf.MoveTowards(slider.value, targetValue, Time.deltaTime * sliderSpeed);
+        }
+        else
+        {
+            slider.value = targetValue;
+        }
+    }
 }
 
 public class HUDManager : MonoBehaviour
@@ -22,72 +63,86 @@ public class HUDManager : MonoBehaviour
     [SerializeField] Character _character;
     [SerializeField] Character_Abilities _character_Abilities;
     [SerializeField] private TMP_Text textMesh_D20Number, textMesh_GameOver, textMesh_Score, textMesh_WaveNumber;
-    [SerializeField] private Slider slider_Health;
+
+
+    [SerializeField] private HUD_Element_Sliding hudElement_health;
 
     [SerializeField]
     private HUD_Element_Ability hudElement_PomPom, hudElement_PowerPom, hudElement_TennisBall, hudElement_Domino, hudElement_Arrow, hudElement_D20;
 
-    private float SliderValue(float sliderValue, float targetValue, float sliderSpeed, bool enableCheck)
-    {
-        if (enableCheck)
-        {
-            return Mathf.MoveTowards(sliderValue, targetValue, Time.deltaTime * sliderSpeed);
-        }
-        return targetValue;
-    }
+    
 
-    private string CooldownText (CooldownDisplayType type, bool displayCheck, float chargeTime)
-    {
-        if(displayCheck)
-        {
-            if(type == CooldownDisplayType.Timer)
-            {
-                return (1 - chargeTime).ToString("0");
-            }
-            if(type == CooldownDisplayType.Percentage)
-            {
-                return (100 * chargeTime).ToString("0");
-            }
-        }
-        return "";
-    }
+    
 
     private void SetText_D20() => 
         textMesh_D20Number.text = _character_Abilities.D20Number.ToString();
 
-    private void SetSliderValue_Health() => 
-        slider_Health.value = SliderValue(slider_Health.value, _character.HealthPercentage, 1, true);
+    private void SetSliderValue_Health() =>
+        hudElement_health.SetSliderValue(_character.HealthPercentage, 1, true);
 
 
-    private void SetSliderValue_Ability_PomPom() => hudElement_PomPom.slider_Cooldown.value = SliderValue(hudElement_PomPom.slider_Cooldown.value,
-            _character_Abilities.Ability_PomPom.chargeTime, 2, _character_Abilities.Ability_PomPom.isCharging);
-    private void SetIconState_Ability_PomPom () => hudElement_PomPom.rawImg_Icon.enabled = !_character_Abilities.Ability_PomPom.isCharging;
-    private void SetTimerText_Ability_PomPom () => hudElement_PomPom.TMP_Text_Cooldown.text = CooldownText(CooldownDisplayType.Timer,
-            _character_Abilities.Ability_PomPom.isCharging, _character_Abilities.Ability_PomPom.chargeTime);
+    private void SetSliderValue_Ability_PomPom() => hudElement_PomPom.SetSliderValue(
+            _character_Abilities.Ability_PomPom.chargeTime, 1, _character_Abilities.Ability_PomPom.isCharging);
+
+    private void SetIconState_Ability_PomPom () => hudElement_PomPom.ToggleIconVisibility(!_character_Abilities.Ability_PomPom.isCharging);
+    private void SetTimerText_Ability_PomPom () => hudElement_PomPom.SetCooldownText(CooldownDisplayType.Timer,
+            _character_Abilities.Ability_PomPom);
 
 
-    private void SetIconState_Ability_PowerPom () =>    
-        hudElement_PowerPom.rawImg_Icon.enabled = !_character_Abilities.Ability_PowerPom.isCharging;
+    private void SetIconState_Ability_PowerPom() => hudElement_PowerPom.ToggleIconVisibility(!_character_Abilities.Ability_PowerPom.isCharging);
 
     private void SetSliderValue_Ability_PowerPom() =>
-        hudElement_PowerPom.slider_Cooldown.value = SliderValue(hudElement_PowerPom.slider_Cooldown.value,
+        hudElement_PowerPom.SetSliderValue(
             _character_Abilities.Ability_PowerPom.chargeTime, 1, _character_Abilities.Ability_PowerPom.isCharging);
 
     private void SetPercentageText_Ability_PowerPom() =>
-        hudElement_PowerPom.TMP_Text_Cooldown.text = CooldownText(CooldownDisplayType.Percentage,
-            _character_Abilities.Ability_PowerPom.isCharging, _character_Abilities.Ability_PowerPom.chargeTime);
+        hudElement_PowerPom.SetCooldownText(CooldownDisplayType.Percentage,
+            _character_Abilities.Ability_PowerPom);
 
 
 
     private void SetSliderValue_Ability_TennisBall () =>
-        hudElement_TennisBall.slider_Cooldown.value = SliderValue(hudElement_TennisBall.slider_Cooldown.value,
+        hudElement_TennisBall.SetSliderValue(
             _character_Abilities.Ability_TennisBall.chargeTime, 1, _character_Abilities.Ability_TennisBall.isCharging);
 
     private void SetIconState_Ability_TennisBall () => 
+        hudElement_TennisBall.rawImg.enabled = !_character_Abilities.Ability_TennisBall.isCharging;
+
+    private void SetTimerText_Ability_TennisBall() =>
+        hudElement_TennisBall.SetCooldownText(CooldownDisplayType.Timer, 
+            _character_Abilities.Ability_TennisBall);
+
+
+
 
     private void SetSliderValue_Ability_Domino () =>
-        slider_AbilityCharge_TennisBall_Bonus.value = SliderValue(slider_AbilityCharge_TennisBall_Bonus.value,
+        hudElement_Domino.SetSliderValue(
             _character_Abilities.Ability_Domino.chargeTime, 1, _character_Abilities.Ability_Domino.isCharging);
+
+    private void SetIconState_Ability_Domino() => hudElement_Domino.ToggleIconVisibility(!_character_Abilities.Ability_Domino.isCharging);
+
+    private void SetPercentageText_Ability_Domino() => hudElement_Domino.SetCooldownText(CooldownDisplayType.Percentage,
+        _character_Abilities.Ability_Domino);
+
+
+
+    private void SetSliderValue_Ability_Arrow() =>
+        hudElement_Arrow.SetSliderValue(_character_Abilities.Ability_Arrow.chargeTime, 1, _character_Abilities.Ability_Arrow.isCharging);
+
+    private void SetIconState_Ability_Arrow() => hudElement_Arrow.ToggleIconVisibility(!_character_Abilities.Ability_Arrow.isCharging);
+
+    private void SetTimerText_Ability_Arrow() => hudElement_Arrow.SetCooldownText(CooldownDisplayType.Timer, _character_Abilities.Ability_Arrow);
+
+
+
+    private void SetSliderValue_Ability_D20 () =>
+        hudElement_D20.SetSliderValue(_character_Abilities.Ability_D20.chargeTime, 1, _character_Abilities.Ability_D20.isCharging);
+
+    private void SetIconState_Ability_D20() => hudElement_D20.ToggleIconVisibility(!_character_Abilities.Ability_D20.isCharging);
+
+    private void SetTimerText_Ability_D20() => hudElement_D20.SetCooldownText(CooldownDisplayType.Timer, _character_Abilities.Ability_D20);
+
+
 
     void Update()
     {
@@ -115,23 +170,31 @@ public class HUDManager : MonoBehaviour
 
         SetSliderValue_Ability_TennisBall();
 
-        
+        SetIconState_Ability_TennisBall();
 
-
+        SetTimerText_Ability_TennisBall();
 
 
 
         SetSliderValue_Ability_Domino();
 
+        SetIconState_Ability_Domino();
+
+        SetPercentageText_Ability_Domino();
 
 
+        SetSliderValue_Ability_Arrow();
+
+        SetIconState_Ability_Arrow();
+
+        SetTimerText_Ability_Arrow();
 
 
+        SetSliderValue_Ability_D20();
 
-        slider_AbilityCharge_D20.value = SliderValue(slider_AbilityCharge_D20.value, 
-            _character_Abilities.Ability_D20.chargeTime, 1, _character_Abilities.Ability_D20.isCharging);
-        
+        SetIconState_Ability_D20();
 
+        SetTimerText_Ability_D20();
 
         textMesh_Score.text = GameManager.Singleton.Score.ToString();
     }

@@ -25,8 +25,11 @@ public class SceneManager_Cutscene1 : MonoBehaviour
     [SerializeField] Animator animator_CalamityTrio;
     [SerializeField] AnimationManager_UIElement aniManager_FadingPanel;
 
+    [SerializeField] Character_Select_Data charSelData;
+
     const string ShowElements_TutorialMenu = "ShowElements_TutorialMenu";
     const string Cutscene_CalamityTrio_FlyBy = "Cutscene_CalamityTrio_FlyBy";
+    const string CharacterSelect = "CharacterSelect";
 
     [SerializeField]
     private Toggle skipTutorial;
@@ -39,6 +42,20 @@ public class SceneManager_Cutscene1 : MonoBehaviour
     public void SkipTutorialButton()
     {
         StartCoroutine(Routine_SkipTutorialButton());
+    }
+
+    public void Button_Sasha()
+    {
+        StartCoroutine(Routine_Button_Sasha());
+    }
+
+    public void Button_Anne()
+    {
+        StartCoroutine(Routine_Button_Anne());
+    }
+    public void Button_Marcy()
+    {
+        StartCoroutine(Routine_Button_Marcy());
     }
 
     public void ReturnButton()
@@ -58,7 +75,9 @@ public class SceneManager_Cutscene1 : MonoBehaviour
 
         yield return new WaitForSeconds(2);
 
-        Routine_ShowTutorialMenu();
+        //Routine_ShowTutorialMenu();
+
+        PlayAnimation_ShowCharacterSelectMenu();
     }
 
     public void PlayAnimation_CalamityTrio_FlyBy ()
@@ -66,9 +85,53 @@ public class SceneManager_Cutscene1 : MonoBehaviour
         AnimationStateChanger.ChangeAnimationState(animator_CalamityTrio, Cutscene_CalamityTrio_FlyBy);
     }
 
-    public void Routine_ShowTutorialMenu ()
+    public void PlayAnimation_ShowTutorialMenu ()
     {
         AnimationStateChanger.ChangeAnimationState(animator_Menu, ShowElements_TutorialMenu);
+    }
+
+    public void PlayAnimation_ShowCharacterSelectMenu()
+    {
+        AnimationStateChanger.ChangeAnimationState(animator_Menu, CharacterSelect);
+    }
+
+    public IEnumerator Routine_Button_Sasha()
+    {
+        //select Sasha. 
+
+        charSelData.SelectSasha();
+
+        aniManager_FadingPanel.PlayAnimation_FadeIn_1s();
+
+        yield return new WaitForSeconds(1);
+
+        SceneManager.LoadScene("Game");
+    }
+
+    public IEnumerator Routine_Button_Anne()
+    {
+        //select Anne. 
+
+        charSelData.SelectAnne();
+
+        aniManager_FadingPanel.PlayAnimation_FadeIn_1s();
+
+        yield return new WaitForSeconds(1);
+
+        SceneManager.LoadScene("Game");
+    }
+
+    public IEnumerator Routine_Button_Marcy()
+    {
+        //select Marcy.
+
+        charSelData.SelectMarcy();
+
+        aniManager_FadingPanel.PlayAnimation_FadeIn_1s();
+
+        yield return new WaitForSeconds(1);
+
+        SceneManager.LoadScene("Game");
     }
 
     public IEnumerator Routine_PlayTutorialButton ()

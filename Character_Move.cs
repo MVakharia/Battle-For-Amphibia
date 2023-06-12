@@ -4,7 +4,6 @@ public class Character_Move : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
     [SerializeField] private Character _character;
-    [SerializeField] private ActionInterface actionInterface;
 
     public int InGame_Y_Movement()
     {

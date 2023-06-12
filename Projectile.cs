@@ -22,7 +22,7 @@ public class Projectile : MonoBehaviour
     public int Damage => damage;
 
     [SerializeField] private int damage;
-    [SerializeField] private bool canMove;
+    [SerializeField] private bool isMoving;
     [SerializeField] private MovementProfile moveProfile;
 
     private void Move() => transform.Translate(moveSpeed * Time.deltaTime * -Vector3.up);
@@ -32,11 +32,23 @@ public class Projectile : MonoBehaviour
         moveProfile = profile;
     }
 
+    public void StartMoving ()
+    {
+        isMoving = true;
+    }
+
+    public void StopMoving ()
+    {
+        isMoving = false;
+    }
+
     void Update()
     {
         if(moveProfile == MovementProfile.Constant)
         {
             //move according to the 'Constant' profile. 
+
+            moveSpeed = 2;
         }
         else if (moveProfile == MovementProfile.P3_2_1)
         {
@@ -48,7 +60,7 @@ public class Projectile : MonoBehaviour
             //move according to this profile. 
         }
 
-        if(canMove)
+        if(isMoving)
         {
             Move();
         }

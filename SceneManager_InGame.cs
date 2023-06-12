@@ -45,9 +45,9 @@ public class SceneManager_InGame : MonoBehaviour
 
         yield return new WaitForSeconds(RoundStartAnimationLength);
 
-        aniManager_Character.GetComponent<Character_Switch>().SetActiveHero();
+        //aniManager_Character.GetComponent<Character_Switch>().SetActiveHero();
 
-        aniManager_Character.PlayAnimation_Idle();
+        //aniManager_Character.PlayAnimation_Idle();
 
         GameManager.Singleton.SetGameState(GameState.InProgress);
 
@@ -162,6 +162,20 @@ public class SceneManager_InGame : MonoBehaviour
         Time.timeScale = 1;
 
         yield return null;
+    }
+
+    private void Awake()
+    {
+        GameObject _ = GameObject.FindGameObjectWithTag("Character");
+
+        if(_ != null)
+        {
+            aniManager_Character = _.GetComponent<AnimationManager_Character>();
+        }
+        else
+        {
+            Debug.LogError("Couldn't find Character ANimation Manager.");
+        }
     }
 
     private void Start()

@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+
     [SerializeField] private float leftBounds, rightBounds, upperBounds, lowerBounds;
 
     public float LeftBounds => leftBounds;

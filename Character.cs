@@ -8,22 +8,24 @@ public enum CharacterState { Alive, Dead }
 
 public class Character : MonoBehaviour
 {
+    [SerializeField] private SelectedHero thisHero;
+
     [Range(0, 100)]
     [SerializeField] private int health;
     [SerializeField] private int maxHealth;
     [Range(0, 2)]
     [SerializeField] private float hurtInvulnTime;
-    [SerializeField] private GameObject sasha, anne, marcy;
     [SerializeField] private ObjectPooler _objectSpawner;
     [SerializeField] private Character_Rendering _character_Rendering;
-    [SerializeField] private Character_Switch _character_Switch;
     [SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private AnimationManager_Character aniManager_Character;
     [SerializeField] private CircleCollider2D _collider;
     [SerializeField] private CharacterState currentState;
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip audio_TakeDamage;
-    
+
+    public SelectedHero ThisHero => thisHero;
+
     public int Health => health;
     public int MaxHealth => maxHealth;
     public float HealthPercentage => Health / (float)MaxHealth;

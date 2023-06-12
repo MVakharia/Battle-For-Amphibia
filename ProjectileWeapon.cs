@@ -1,34 +1,43 @@
 using UnityEngine;
 
+public enum FiringState
+{
+    Standby, Pattern, Cooldown
+}
+
 public class ProjectileWeapon : MonoBehaviour
 {
     [SerializeField] private ObjectPooler objPooler;
-    [SerializeField] private float projectilesPerSecond;
     [SerializeField] GameObject target;
     [SerializeField] GameObject[] weaponObject;
+    [SerializeField] private int patternNumber;
+    [SerializeField] private bool canFirePattern;
+    [SerializeField] private float patternDelayTimer;
+    [SerializeField] private bool isCountingPatternDelay;
+
+    private void StartPatternDelay(float time)
+    {
+        isCountingPatternDelay = true;
+
+        patternDelayTimer = time;
+    }
+
+    private void StopPatternDelay() => isCountingPatternDelay = false;
+
+    [SerializeField] private int patternPart;
 
 
-    private float CooldownTimeMax => 1 / projectilesPerSecond;
 
-    private void StartPerformingAction() => isPerformingAction = true;
-    private void StopPerformingAction() => isPerformingAction = false;
-
-    private void StartCoolingDown() => isCoolingDown = true;
-    private void StopCoolingDown() => isCoolingDown = false;
-
-    private void CountCooldown () => cooldownTimeCurrent -= Time.deltaTime;
-    private void ResetCooldownTimer() => cooldownTimeCurrent = CooldownTimeMax;
-
-    private float FiringAngle ()
+    private float FiringAngle()
     {
         return 0;
     }
 
-    private float Angle_LookAtPlayer ()
+    private float Angle_LookAtPlayer(Vector3 position)
     {
-        Vector3 direction = target.transform.position - transform.position;
+        Vector3 direction = target.transform.position - position;
 
-        float angle = Vector3.Angle(direction, -transform.up);
+        float angle = Vector3.Angle(direction, -Vector3.up);
 
         if (target.transform.position.x < transform.position.x)
         {
@@ -38,30 +47,106 @@ public class ProjectileWeapon : MonoBehaviour
         return angle;
     }
 
-    private void FireProjectile(Transform weaponTransform, MovementProfile profile)
+    /// <summary>
+    /// Fires one projectile from a desired location, at the desired angle, sets its movement profile, and starts its movement.
+    /// </summary>
+    /// <param name="firingLocation"></param>
+    /// <param name="profile"></param>
+    /// <param name="firingAngle"></param>
+    private void FireProjectile(Vector3 firingLocation, MovementProfile profile, float firingAngle)
     {
-        Projectile p = objPooler.RemoveAndSpawnFromPool(weaponTransform.position, Quaternion.Euler(0, 0, FiringAngle())).GetComponent<Projectile>();
-
-        //Once the projectile is spawned, the projectile's movement profile is set. This is done by setting an enum in the projectile class. 
-        //The projectile then moves according to this profile.
+        Projectile p = objPooler.RemoveAndSpawnFromPool(firingLocation, Quaternion.Euler(0, 0, firingAngle)).GetComponent<Projectile>();
 
         p.SetMovementProfile(profile);
+
+        p.StartMoving();
     }
 
     /// <summary>
-    /// Fires a single projectile at a constant speed. 
-    /// The speed is set in the 'Projectile' class, and is the same for all projectiles fired with the 'Constant' movement profile. 
+    /// Fires a wave of projectiles from a desired location, launching the first one at an angle and then spacing them out by 'step'.
     /// </summary>
-    private void FirePattern0 ()
+    private void FireProjectiles(Vector3 firingLocation, MovementProfile profile, float startingAngle, int numberOfProjectiles, float step)
     {
-        FireProjectile(weaponObject[0].transform, MovementProfile.Constant);
+        for (int i = 0; i < numberOfProjectiles; i++)
+        {
+            Projectile p = objPooler.RemoveAndSpawnFromPool(firingLocation, Quaternion.Euler(0, 0, startingAngle + (i * step))).GetComponent<Projectile>();
+
+            p.SetMovementProfile(profile);
+
+            p.StartMoving();
+        }
     }
 
-    private void FirePattern1 ()
+    private void FirePattern()
     {
-        FireProjectile(weaponObject[0].transform, MovementProfile.Constant);
+        patternNumber++;
 
-        //After a short delay, fire a second projectile in the same direction. 
+        if (patternNumber == 1)
+        {
+            FireProjectiles(weaponObject[0].transform.position, MovementProfile.Constant, 0, 1, 0);
+
+            StartPatternDelay(.75F);
+        }
+        if(patternNumber == 2)
+        {
+            FireProjectiles(weaponObject[0].transform.position, MovementProfile.Constant, -45, 2, 90);
+
+            StartPatternDelay(.8F);
+        }
+
+        if(patternNumber == 3)
+        {
+            FireProjectiles(weaponObject[0].transform.position, MovementProfile.Constant, -80, 5, 40);
+
+            StartPatternDelay(0.9F);
+        }
+
+        if(patternNumber == 4)
+        {
+            FireProjectiles(weaponObject[0].transform.position, MovementProfile.Constant, -75, 7, 25);
+
+            StartPatternDelay(1);
+        }
+
+        if(patternNumber == 5)
+        {
+            FireProjectiles(weaponObject[0].transform.position, MovementProfile.Constant, -90, 19, 10);
+
+            StartPatternDelay(0.5F);
+        }
+
+        if(patternNumber == 6)
+        {
+            FireProjectiles(weaponObject[0].transform.position + new Vector3(-4F, 0), MovementProfile.Constant, 0, 19, 10);
+
+            StartPatternDelay(0.5F);
+        }
+
+        if(patternNumber == 7)
+        {
+            FireProjectiles(weaponObject[0].transform.position + new Vector3(4F, 0), MovementProfile.Constant, 180, 19, 10);
+
+            StartPatternDelay(0.5F);
+        }
+
+        if(patternNumber >= 8)
+        {
+            int step = Random.Range(5, 16);
+
+            int numberOfProjectiles = Random.Range(10, 26);
+
+            float delay = Random.Range(0.5F, 1);
+
+            float xPos = Random.Range(-5, 5F);
+
+            Vector3 newPos = weaponObject[0].transform.position + new Vector3(xPos, 0);
+
+            float startingAngle = (-((step * numberOfProjectiles) - step) / 2) + Angle_LookAtPlayer(newPos);
+
+            FireProjectiles(newPos, MovementProfile.Constant, startingAngle, numberOfProjectiles, step);
+
+            StartPatternDelay(delay);
+        }
     }
 
     private void Awake()
@@ -74,52 +159,33 @@ public class ProjectileWeapon : MonoBehaviour
 
     private void Start()
     {
-        readyToPerformAction = true;
-
-        cooldownTimeCurrent = CooldownTimeMax;
+        StartPatternDelay(1);
     }
+
 
     private void Update()
     {
         if (GameManager.Singleton.GameState != GameState.InProgress) return;
 
-
-
-        ActionOnCooldown();
-    }
-
-    [SerializeField] private bool readyToPerformAction;
-    [SerializeField] private bool isCoolingDown;
-    [SerializeField] private float cooldownTimeCurrent;
-    [SerializeField] private bool isPerformingAction;
-
-    private void ActionOnCooldown()
-    {
-        if (readyToPerformAction)
+        if (canFirePattern)
         {
-            StartPerformingAction();
+            canFirePattern = false;
+
+            FirePattern();
         }
 
-        if (isCoolingDown)
+        if (isCountingPatternDelay)
         {
-            CountCooldown();
+            patternDelayTimer -= Time.deltaTime;
         }
 
-        if (cooldownTimeCurrent <= 0)
+        if (patternDelayTimer < 0)
         {
-            StopCoolingDown();
+            StopPatternDelay();
 
-            ResetCooldownTimer();
-        }
+            patternDelayTimer = 0;
 
-        if (isPerformingAction && !isCoolingDown)
-        {
-            PerformAction();
-
-            StartCoolingDown();
+            canFirePattern = true;
         }
     }
-
-
-    private void PerformAction() { }
 }
